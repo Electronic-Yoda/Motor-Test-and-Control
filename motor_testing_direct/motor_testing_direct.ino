@@ -29,6 +29,8 @@ void setup() {
   //SPI clock speed:10MHz, Data Shift:MSB First, Data Clock Idle: SPI_MODE0 (MODE =00)
   SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0)); //comment if not MCP4161
   SPI.begin();
+
+  //make sure digital pot outputs 0 from wiper
   digitalPotWrite(CS0, address, 0);
 
 
@@ -40,7 +42,7 @@ void setup() {
 }
 
 void loop() {
-  //do nothing it the motor is not turned on
+  //do nothing if the motor is not turned on
   if (!on) {
     return; 
   }
