@@ -1,29 +1,37 @@
 //Raymond
 
 #include <SPI.h>
-#define MOSI 11
-#define MISO 12
-#define SCK 13
-#define CS0 10
+
+/*Note that in pins_arduino.h (included in Arduino IDE installation):
+MOSI = 11
+MISO = 12
+SCK = 13 
+SS = 10
+*/
+
+const byte CS0 = SS;
 const byte address = 0x00;
 
 int ledPin = 5;
 int buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
-bool on = false;
+bool on;
 
 
 const byte motorControl = 9;
-const byte motorPower = 4;
+const byte mainSig = 8;
 const byte wiper = A0;
-//ISR function declaration
-void ISR_LED();
 
 void setup() {
-  // put your setup code here, to run once:
+  on = false;
   
   pinMode(ledPin, OUTPUT);
+  pinMode(mainSig, OUTPUT);
   pinMode(buttonApin, INPUT_PULLUP);  
   pinMode(CS0, OUTPUT); //pot0 chipselect
+
+  //make suire mainSig defaults to high and LedPin is low
+  digitalWrite(mainSig, HIGH);
+  pinMode(ledPin, LOW);
 
   //Initialise SPI interface
   //SPI clock speed:10MHz, Data Shift:MSB First, Data Clock Idle: SPI_MODE0 (MODE =00)
@@ -39,6 +47,8 @@ void setup() {
   //Note: FALLING is for when the pin goes from high to low.
 
   Serial.begin(9600); 
+
+  
 }
 
 void loop() {
@@ -48,6 +58,7 @@ void loop() {
   }
   
   digitalWrite(ledPin, HIGH); 
+  digitalWrite(mainSig, LOW);
   
   //read from POT
   int wiperValue = analogRead(wiper);  //note analogRead can return 0 to 1023
@@ -62,12 +73,16 @@ void loop() {
 
 void ISR_LED() {
   //ledState = !ledState;
-  on = !on;
   Serial.print("Button Pressed\n");
 
-  if (!on) {
+  if (on) {
+    on = false;
     digitalWrite(ledPin, LOW);  
     digitalPotWrite(CS0, address, 0);
+    digitalWrite(mainSig, HIGH);
+  }
+  if (!on) {
+    on = true;
   }
 }
 
