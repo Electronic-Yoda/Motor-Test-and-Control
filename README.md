@@ -5,7 +5,6 @@ The set up of the test is as follows:
 - mechanical potentiometer -> Arduino Uno -> MCP4146 digital potentiometer -> motor ECU accel/regen input -> motor
 
 The test consists of using the mechanical inputs of push buttons and mechanical pots to control the Mitsuba motor through a PCB designed to interface with the motor's electronic control unit (ECU).
-
 An Arduino Uno was used to capture the signal from the push buttons through interrupts and map the voltage output of the mechanical pot to the SPI MOSI values necessary to communicate the the digital pot which outputs acceleration and regeneration signals for the motor's ECU.
 
 Some files in the repository directly communicate with the digital pot via SPI. Others utilize the arduino-mcp4xxx library https://github.com/jmalloc/arduino-mcp4xxx which offers higher levels of abstraction.
