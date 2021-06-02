@@ -1,4 +1,4 @@
-**This repository contains code used to test and control a 2000W nominal Mitsuba M2096 DC motor**
+**This repository contains code used to test and control a 2000W nominal Mitsuba M2096 Brushless DC Motor**
 
 The set up of the test is as follows:
 - push buttons -> Arduino Uno -> CPC1002N solid state relays -> motor controller input -> motor
