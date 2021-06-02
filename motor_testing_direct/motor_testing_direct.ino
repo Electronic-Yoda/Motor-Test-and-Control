@@ -10,16 +10,15 @@ SS = 10
 */
 
 const byte CS0 = SS;
-const byte address = 0x00;
-
-int ledPin = 5;
-int buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
-bool on;
-
-
+const byte ledPin = 5;
+const byte buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
 const byte motorControl = 9;
 const byte mainSig = 8;
 const byte wiper = A0;
+
+const byte address = 0x00;
+
+bool on;
 
 void setup() {
   on = false;
@@ -60,7 +59,7 @@ void loop() {
   digitalWrite(ledPin, HIGH); 
   digitalWrite(mainSig, LOW);
   
-  //read from POT
+  //read from mechanical pot turned by hand
   int wiperValue = analogRead(wiper);  //note analogRead can return 0 to 1023
   
   
