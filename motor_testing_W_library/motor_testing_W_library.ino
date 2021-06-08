@@ -5,10 +5,10 @@
 using namespace icecave::arduino;
 
 /*Note that in pins_arduino.h (included in Arduino IDE installation):
-MOSI = 11
+MOSI = 11  should connect
 MISO = 12
-SCK = 13 
-SS = 10
+SCK = 13 should connect
+SS = 10 should connect
 */
 
 const byte CS0 = SS;
@@ -126,4 +126,12 @@ void ISR_LED() {
     on = true;
     return;
   }
+}
+
+void digitalPotWrite(int CS, int address, int command) {
+  digitalWrite(CS, LOW);
+  SPI.transfer(address); //if MCP4161
+  //SPI.transfer(B00010001); //if MCP41010
+  SPI.transfer(command);
+  digitalWrite(CS, HIGH);
 }

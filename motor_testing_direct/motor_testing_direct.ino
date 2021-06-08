@@ -53,6 +53,7 @@ void setup() {
 void loop() {
   //do nothing if the motor is not turned on
   if (!on) {
+      digitalPotWrite(CS0, address, 0);
 
     return; 
   }
@@ -65,11 +66,16 @@ void loop() {
   
   
   //map the wipeValue to the control for the motor
-  int motorControlValue = map(wiperValue, 10, 1023, 0, 255); 
-  
-  digitalPotWrite(CS0, address, motorControlValue);
-  Serial.println(motorControlValue);
+  int motorControlValue = map(wiperValue, 60, 1023, 0, 255); 
+  if (motorControlValue < 0) motorControlValue = 0;
+  //digitalPotWrite(CS0, address, motorControlValue);
+  int constantMotorControlValue = 200;
+  digitalPotWrite(CS0, address, constantMotorControlValue);
+  Serial.println(constantMotorControlValue);
 
+  
+  //Serial.println(motorControlValue);
+  delay(500);
 
 }
 
@@ -81,7 +87,6 @@ void ISR_LED() {
     Serial.print("turn off\n");
     on = false;
     digitalWrite(ledPin, LOW);  
-    digitalPotWrite(CS0, address, 0);
     digitalWrite(mainSig, HIGH);
     return;
   }
