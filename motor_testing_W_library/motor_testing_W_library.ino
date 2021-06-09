@@ -12,6 +12,7 @@ SS = 10 should connect
 */
 
 const byte CS0 = SS;
+const byte CS1 = 6;
 const byte ledPin = 3;
 const byte buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
 const byte mainSig = 9;
@@ -26,10 +27,13 @@ bool on;
 int count;
 
 //initialize the digital pot object for MCP4161 
-MCP4XXX MCP4146(CS0);//note that the constructor calls SPI.begin()
+MCP4XXX MCP4146_0(CS0);//note that the constructor calls SPI.begin()
 /*this defaults to:
-MCP4XXX MCP4146(CS0, B00, 255, 1);  
+MCP4XXX MCP4146_0(CS0, B00, 255, 1);  
 */
+MCP4XXX MCP4146_1(CS1);//note that the constructor calls SPI.begin()
+
+
 void setup() {
   
   on = false;
@@ -37,7 +41,8 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   pinMode(mainSig, OUTPUT);
   pinMode(buttonApin, INPUT_PULLUP);  
-  pinMode(CS0, OUTPUT); //pot0 chipselect
+  pinMode(CS0, OUTPUT); //pot0 (accel) chipselect
+  pinMode(CS1, OUTPUT); //pot1 (regen) chipselect
   pinMode(gearUp, OUTPUT);
   pinMode(gearDown, OUTPUT);
 
@@ -48,9 +53,12 @@ void setup() {
   digitalWrite(gearUp, HIGH);
   digitalWrite(gearDown, HIGH);
 
-
+  digitalWrite(CS1, HIGH); //need to deselect regen pot
+  
   //make sure digital pot outputs 0 from wiper
-  MCP4146.set(0);
+  MCP4146_0.set(0);
+
+  MCP4146_1.set(0);
 
   //set up interrupts
   attachInterrupt(digitalPinToInterrupt(buttonApin), ISR_LED, RISING);
@@ -64,11 +72,13 @@ void loop() {
   //do nothing if the motor is not turned on
   if (!on) {
     //Serial.println("not on in loop");
-    MCP4146.set(0);
+    MCP4146_0.set(0);
+    MCP4146_1.set(0);
 
     return; 
   }
-  
+  MCP4146_1.set(0);
+
   digitalWrite(ledPin, HIGH); 
   digitalWrite(mainSig, LOW);
   
@@ -82,7 +92,7 @@ void loop() {
     motorControlValue = 0;
 
   //send signal for digital Pot via SPI
-  MCP4146.set(motorControlValue);
+  MCP4146_0.set(motorControlValue);
   if (count % 1000 == 0) {
     Serial.println(motorControlValue);
   }

@@ -10,6 +10,8 @@ SS = 10
 */
 
 const byte CS0 = SS;
+const byte CS1 = 6;
+
 const byte ledPin = 3;
 const byte buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
 const byte mainSig = 9;
@@ -26,10 +28,15 @@ void setup() {
   pinMode(mainSig, OUTPUT);
   pinMode(buttonApin, INPUT_PULLUP);  
   pinMode(CS0, OUTPUT); //pot0 chipselect
+    pinMode(CS1, OUTPUT); //pot1 (regen) chipselect
+
 
   //make suire mainSig defaults to high and LedPin is low
   digitalWrite(mainSig, HIGH);
   digitalWrite(ledPin, LOW);
+
+
+    digitalWrite(CS1, HIGH); //need to deselect regen pot
 
   //Initialise SPI interface
   //SPI clock speed:10MHz, Data Shift:MSB First, Data Clock Idle: SPI_MODE0 (MODE =00)
