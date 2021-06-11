@@ -94,6 +94,7 @@ void loop() {
   //send signal for digital Pot via SPI
   MCP4146_0.set(motorControlValue);
   if (count % 1000 == 0) {
+    Serial.print("Accel Wiper Position: ");
     Serial.println(motorControlValue);
   }
   count++;

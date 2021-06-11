@@ -46,6 +46,7 @@ void setup() {
   //make sure digital pot outputs 0 from wiper
   digitalPotWrite(CS0, address, 0);
 
+  digitalPotWrite(CS1, address, 0);
 
   //set up interrupts
   attachInterrupt(digitalPinToInterrupt(buttonApin), ISR_LED, FALLING);
@@ -61,9 +62,11 @@ void loop() {
   //do nothing if the motor is not turned on
   if (!on) {
       digitalPotWrite(CS0, address, 0);
+      digitalPotWrite(CS1, address, 0);
 
     return; 
   }
+  digitalPotWrite(CS1, address, 0);
 
   digitalWrite(ledPin, HIGH); 
   digitalWrite(mainSig, LOW);
