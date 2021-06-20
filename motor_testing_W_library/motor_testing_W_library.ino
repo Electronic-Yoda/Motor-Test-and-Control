@@ -117,7 +117,7 @@ void loop() {
 //this function sends a pulse to change gear
 void changeGear(byte gearPin) {
   digitalWrite(gearPin, LOW);
-  delay(500); //send a low pulse of 0.5 seconds
+  delay(20); //send a low pulse of 20ms
   digitalWrite(gearPin, HIGH);
 }
 
@@ -139,10 +139,12 @@ void ISR_LED() {
   }
 }
 
+/* 
+//unnecessary here
 void digitalPotWrite(int CS, int address, int command) {
   digitalWrite(CS, LOW);
   SPI.transfer(address); //if MCP4161
   //SPI.transfer(B00010001); //if MCP41010
   SPI.transfer(command);
   digitalWrite(CS, HIGH);
-}
+} */
