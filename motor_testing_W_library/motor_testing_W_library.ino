@@ -33,6 +33,7 @@ MCP4XXX MCP4146_0(CS0, B00, 255, 1);
 */
 MCP4XXX MCP4146_1(CS1);//note that the constructor calls SPI.begin()
 
+String serialInput = "";
 
 void setup() {
   
@@ -98,10 +99,11 @@ void loop() {
     Serial.println(motorControlValue);
   }
   count++;
-
   //check and send gear up and down signals if necessary
   if (Serial.available() > 0) {
-    String serialInput = Serial.readString();
+    Serial.println("yes");
+    serialInput = Serial.readString();
+    serialInput.trim(); //necessary to reduce to proper string
     if (serialInput == "w") {
       changeGear(gearUp);
       Serial.println("gear up");
