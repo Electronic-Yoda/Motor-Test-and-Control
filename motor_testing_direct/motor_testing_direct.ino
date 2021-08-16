@@ -17,7 +17,6 @@ const byte buttonApin = 2; //on uno, pin 2 and 3 allow interrupts
 const byte mainSig = 9;
 const byte wiper = A0;
 
-const byte address = 0x00;
 
 bool on;
 
@@ -44,9 +43,9 @@ void setup() {
   SPI.begin();
 
   //make sure digital pot outputs 0 from wiper
-  digitalPotWrite(CS0, address, 0);
+  digitalPotWrite(CS0, 0);
 
-  digitalPotWrite(CS1, address, 0);
+  digitalPotWrite(CS1, 0);
 
   //set up interrupts
   attachInterrupt(digitalPinToInterrupt(buttonApin), ISR_LED, FALLING);
@@ -107,10 +106,17 @@ void ISR_LED() {
   }
 }
 
-void digitalPotWrite(int CS, int address, int command) {
+void digitalPotWrite(int CS, int wiperValue) {
+  byte ninethDataBit = (wiperValue >> 8) & 0b1;
+
+	byte potAddress = 0b0000;
+	byte writeCommand = 0b00;
+	byte commandByte  = (potAddress << 4) | (writeCommand << 2) | ninethDataBit;
+	byte dataByte = wiperValue & 0xFF;
+  
   digitalWrite(CS, LOW);
-  SPI.transfer(address); //if MCP4161
+  SPI.transfer(commandByte); //if MCP4161
   //SPI.transfer(B00010001); //if MCP41010
-  SPI.transfer(command);
+  SPI.transfer(dataByte);
   digitalWrite(CS, HIGH);
 }
